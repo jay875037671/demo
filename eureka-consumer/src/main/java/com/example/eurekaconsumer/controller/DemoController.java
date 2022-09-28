@@ -1,5 +1,8 @@
-package com.example.eurekaconsumer;
+package com.example.eurekaconsumer.controller;
 
+import com.example.eurekaconsumer.annotation.MultiArgumentResolver;
+import com.example.eurekaconsumer.api.DemoApi;
+import com.example.eurekaconsumer.dto.DemoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +16,7 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-public class DemoController {
+public class DemoController implements DemoApi {
 
     @Autowired
     RestTemplate restTemplate;
@@ -36,9 +39,14 @@ public class DemoController {
         return doPost(formStr, jsonStr, request);
     }
 
-    @RequestMapping(value = "/dispatch", consumes = "application/json")
+    @RequestMapping(value = "/dispatch-alt", consumes = "application/json")
     public String dispatchJson(@RequestBody String str, HttpServletRequest request) {
         return doPost(str, request);
+    }
+
+    @RequestMapping(value = "/dispatch", consumes = "application/json")
+    public String dispatchJson(@RequestBody Map<String, Object> params, HttpServletRequest request) {
+        return doPost(params, request);
     }
 
     @RequestMapping(value = "/dispatch", consumes = "application/x-www-form-urlencoded")
@@ -62,7 +70,7 @@ public class DemoController {
 
     public String doPost(DemoDto dto, HttpServletRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
-        String str = "";
+        String str;
         try {
             str = objectMapper.writeValueAsString(dto);
         } catch (JsonProcessingException e) {
@@ -83,7 +91,7 @@ public class DemoController {
 
     private String doPost(Map<String, Object> params, HttpServletRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
-        String str = "";
+        String str;
         try {
             str = objectMapper.writeValueAsString(params);
         } catch (JsonProcessingException e) {

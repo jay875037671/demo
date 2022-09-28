@@ -1,5 +1,6 @@
-package com.example.eurekaconsumer;
+package com.example.eurekaconsumer.config;
 
+import com.example.eurekaconsumer.processer.MultiArgumentResolverMethodProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;

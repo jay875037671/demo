@@ -1,5 +1,6 @@
-package com.example.eurekaconsumer;
+package com.example.eurekaconsumer.processer;
 
+import com.example.eurekaconsumer.annotation.MultiArgumentResolver;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;

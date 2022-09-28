@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer;
+package com.example.eurekaconsumer.dto;
 
 import lombok.Data;
 
