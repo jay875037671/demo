@@ -66,21 +66,21 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
 
         if (contentType.contains(CONTENT_TYPE_JSON)) {
             Object o = requestResponseBodyMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
-            Map<String,String> map = StringUtils.isNotBlank(o.toString()) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
+            Map<String,String> map = StringUtils.isNotBlank((String) o) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
             map.put("type","json");
             return objectMapper.writeValueAsString(map);
         }
 
         if (contentType.contains(CONTENT_TYPE_FORM_URLENCODED)) {
             Object o =  servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
-            Map<String,String> map = StringUtils.isNotBlank(o.toString()) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
+            Map<String,String> map = StringUtils.isNotBlank((String) o) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
             map.put("type","form");
             return objectMapper.writeValueAsString(map);
         }
 
         if (contentType.contains(CONTENT_TYPE_FORM_DATA)) {
             Object o =  servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
-            Map<String,String> map = StringUtils.isNotBlank(o.toString()) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
+            Map<String,String> map = StringUtils.isNotBlank((String) o) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
             map.put("type","form-data");
             return objectMapper.writeValueAsString(map);
         }
@@ -93,7 +93,7 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         messageConverters.add(new ByteArrayHttpMessageConverter());
         messageConverters.add(new ResourceHttpMessageConverter());
         messageConverters.add(new ResourceRegionHttpMessageConverter());
-        messageConverters.add(new SourceHttpMessageConverter());
+        messageConverters.add(new SourceHttpMessageConverter<>());
         messageConverters.add(new AllEncompassingFormHttpMessageConverter());
         messageConverters.add(new MappingJackson2HttpMessageConverter());
         messageConverters.add(new MappingJackson2XmlHttpMessageConverter());
