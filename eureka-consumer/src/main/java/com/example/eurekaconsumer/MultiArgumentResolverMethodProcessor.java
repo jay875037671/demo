@@ -1,9 +1,7 @@
 package com.example.eurekaconsumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.*;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -19,17 +17,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ServletModelAttribu
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 自定义参数解析器用以支持同一个参数支持application/json和application/x-www-form-urlencoded解析
  *
- * @see MultiArgumentResolver
  * @author Snowball
  * @version 1.0
  * @date 2020/08/31 19:00
+ * @see MultiArgumentResolver
  */
 @Slf4j
 @AllArgsConstructor
@@ -62,32 +58,18 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         if (contentType == null) {
             throw new IllegalArgumentException("不支持contentType");
         }
-        ObjectMapper objectMapper = new ObjectMapper();
 
         if (contentType.contains(CONTENT_TYPE_JSON)) {
-            Object o = requestResponseBodyMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
-            Map<String,String> map = StringUtils.isNotBlank((String) o) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
-            map.put("type","json");
-            return objectMapper.writeValueAsString(map);
-        }
-
-        if (contentType.contains(CONTENT_TYPE_FORM_URLENCODED)) {
-            Object o =  servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
-            Map<String,String> map = StringUtils.isNotBlank((String) o) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
-            map.put("type","form");
-            return objectMapper.writeValueAsString(map);
-        }
-
-        if (contentType.contains(CONTENT_TYPE_FORM_DATA)) {
-            Object o =  servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
-            Map<String,String> map = StringUtils.isNotBlank((String) o) ? objectMapper.readValue(o.toString(), Map.class) : new HashMap<>();
-            map.put("type","form-data");
-            return objectMapper.writeValueAsString(map);
+            return requestResponseBodyMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
+        } else if (contentType.contains(CONTENT_TYPE_FORM_URLENCODED)) {
+            return servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
+        } else if (contentType.contains(CONTENT_TYPE_FORM_DATA)) {
+            return servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
         }
         throw new IllegalArgumentException("不支持contentType");
     }
 
-    public List<HttpMessageConverter<?>> initHttpMessageConverters(){
+    public List<HttpMessageConverter<?>> initHttpMessageConverters() {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
         messageConverters.add(new StringHttpMessageConverter());
         messageConverters.add(new ByteArrayHttpMessageConverter());

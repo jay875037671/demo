@@ -2,11 +2,10 @@ package com.example.eurekaconsumer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @Slf4j
@@ -21,16 +20,17 @@ public class DemoController {
         return "name：" + name + "\nage：" + age;
     }
 
-    public String doPost(String str) {
-        String req = "param: " + str;
+    public String doPost(String str, HttpServletRequest request) {
+        String contentType = request.getHeader("content-type");
+        log.info("入参值：{}", str);
+        String req = String.format("Content-Type: %s\nparam: %s", contentType, str);
         String url = "http://EUREKA-PRODUCER/demo?param={req}";
-        log.info(String.format("url:%s req: %s", url, req));
+        log.info(String.format("url:%s\n req: %s", url, req));
         return restTemplate.getForObject(url, String.class, req);
     }
 
     @RequestMapping("rest")
-    public String rest(@MultiArgumentResolver String str) {
-        return doPost(str);
+    public String restJson(@MultiArgumentResolver String str, HttpServletRequest request) {
+        return doPost(str, request);
     }
-
 }
