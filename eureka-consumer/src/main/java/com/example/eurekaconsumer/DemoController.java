@@ -29,8 +29,8 @@ public class DemoController {
         return restTemplate.getForObject(url, String.class, req);
     }
 
-    @RequestMapping("rest")
-    public String restJson(@MultiArgumentResolver String str, HttpServletRequest request) {
+    @RequestMapping("/rest")
+    public String rest(@MultiArgumentResolver String str, HttpServletRequest request) {
         return doPost(str, request);
     }
 }
