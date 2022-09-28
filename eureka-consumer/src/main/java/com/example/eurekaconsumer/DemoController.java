@@ -17,6 +17,16 @@ public class DemoController {
     @Autowired
     RestTemplate restTemplate;
 
+    @RequestMapping(value = "/jsonObj")
+    public String jsonObj(@MultiArgumentResolver DemoDto dto, HttpServletRequest request) {
+        return doPost(dto, request);
+    }
+
+    @RequestMapping(value = "/modelAttributeObj")
+    public String modelAttributeObj(@MultiArgumentResolver DemoDto dto, HttpServletRequest request) {
+        return doPost(dto, request);
+    }
+
     @PostMapping("/hello")
     public String hello(@RequestParam("name") String name,
                         @RequestParam("age") Integer age) {

@@ -22,8 +22,8 @@ public class CoreWebConfig implements WebMvcConfigurer {
      * @return
      */
     @Bean
-    public MultiArgumentResolverMethodProcessor multiArgumentResolverMethodProcessor() {
-        return new MultiArgumentResolverMethodProcessor();
+    public UpgradeMultiArgumentResolverMethodProcessor upgradeMultiArgumentResolverMethodProcessor() {
+        return new UpgradeMultiArgumentResolverMethodProcessor();
     }
 
     /**
@@ -32,7 +32,7 @@ public class CoreWebConfig implements WebMvcConfigurer {
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(0, multiArgumentResolverMethodProcessor());
+        resolvers.add(0, upgradeMultiArgumentResolverMethodProcessor());
     }
 }
 

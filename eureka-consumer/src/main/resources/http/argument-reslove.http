@@ -1,0 +1,21 @@
+###
+POST http://127.0.0.1:8763/jsonObj
+Content-Type: application/json
+
+{
+  "name": "snowball",
+  "age": "18",
+  "id": "1"
+}
+
+<> 2022-09-28T151714.200.txt
+<> 2022-09-28T150559.200.txt
+
+###
+POST http://127.0.0.1:8763/modelAttributeObj
+Content-Type: application/x-www-form-urlencoded
+
+name=chen&age=18&id=1
+
+<> 2022-09-28T150952.200.txt
+<> 2022-09-28T150559-1.200.txt
