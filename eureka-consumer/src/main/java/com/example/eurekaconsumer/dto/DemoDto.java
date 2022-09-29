@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer.processer.dto;
+package com.example.eurekaconsumer.dto;
 
 import com.example.eurekacommon.annotation.SensitiveField;
 import com.example.eurekacommon.enums.EncryptWayEnum;
