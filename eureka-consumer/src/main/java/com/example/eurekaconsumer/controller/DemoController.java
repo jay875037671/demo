@@ -1,8 +1,10 @@
 package com.example.eurekaconsumer.controller;
 
-import com.example.eurekaconsumer.annotation.MultiArgumentResolver;
+import com.example.eurekacommon.annotation.DataProcess;
+import com.example.eurekacommon.annotation.MultiArgumentResolver;
+import com.example.eurekacommon.enums.DataHandle;
 import com.example.eurekaconsumer.api.DemoApi;
-import com.example.eurekaconsumer.dto.DemoDto;
+import com.example.eurekaconsumer.processer.dto.DemoDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class DemoController implements DemoApi {
     }
 
     @RequestMapping(value = "/rest")
+    @DataProcess(sign = DataHandle.ENCRYPT)
     public String rest(@MultiArgumentResolver DemoDto dto, HttpServletRequest request) {
         return doPost(dto, request);
     }
@@ -73,6 +76,7 @@ public class DemoController implements DemoApi {
         String str;
         try {
             str = objectMapper.writeValueAsString(dto);
+            log.info("加密后的dto:{}", str);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

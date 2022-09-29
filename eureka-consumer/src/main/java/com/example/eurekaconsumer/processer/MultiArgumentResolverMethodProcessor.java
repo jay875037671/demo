@@ -1,6 +1,6 @@
 package com.example.eurekaconsumer.processer;
 
-import com.example.eurekaconsumer.annotation.MultiArgumentResolver;
+import com.example.eurekacommon.annotation.MultiArgumentResolver;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

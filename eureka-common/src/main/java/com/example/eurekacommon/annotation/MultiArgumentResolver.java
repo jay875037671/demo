@@ -1,6 +1,4 @@
-package com.example.eurekaconsumer.annotation;
-
-import com.example.eurekaconsumer.processer.MultiArgumentResolverMethodProcessor;
+package com.example.eurekacommon.annotation;
 
 import java.lang.annotation.*;
 
@@ -9,7 +7,6 @@ import java.lang.annotation.*;
  *
  * 同一个参数支持application/json和application/x-www-form-urlencoded
  *
- * @see MultiArgumentResolverMethodProcessor
  * @author Snowball
  * @version 1.0
  * @date 2020/08/31 18:57
