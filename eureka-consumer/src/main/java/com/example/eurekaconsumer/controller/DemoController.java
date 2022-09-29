@@ -30,7 +30,6 @@ public class DemoController implements DemoApi {
     }
 
     @RequestMapping(value = "/rest")
-    @DataProcess(sign = DataHandle.ENCRYPT)
     public String rest(@MultiArgumentResolver DemoDto dto, HttpServletRequest request) {
         return doPost(dto, request);
     }
@@ -71,6 +70,7 @@ public class DemoController implements DemoApi {
         return restTemplate.getForObject(url, String.class, req);
     }
 
+    @DataProcess(sign = DataHandle.ENCRYPT)
     public String doPost(DemoDto dto, HttpServletRequest request) {
         ObjectMapper objectMapper = new ObjectMapper();
         String str;
