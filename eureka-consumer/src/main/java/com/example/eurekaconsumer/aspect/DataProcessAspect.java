@@ -1,4 +1,4 @@
-package com.example.eurekacommon.aspect;
+package com.example.eurekaconsumer.aspect;
 
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
