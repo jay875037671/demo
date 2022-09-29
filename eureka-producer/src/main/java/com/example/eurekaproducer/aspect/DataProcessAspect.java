@@ -50,7 +50,7 @@ public class DataProcessAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         //获取方法注解DateProcess中参数
         DataProcess dateProcess = signature.getMethod().getAnnotation(DataProcess.class);
-
+        log.info("操作类型为:{}",dateProcess.sign());
         if (dateProcess.sign() == DataHandle.ENCRYPT) {
             //加密方法参数
             encrypt(joinPoint);
