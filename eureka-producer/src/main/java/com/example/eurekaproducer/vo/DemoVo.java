@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer.vo;
+package com.example.eurekaproducer.vo;
 
 import com.example.eurekacommon.annotation.SensitiveField;
 import com.example.eurekacommon.enums.EncryptWayEnum;

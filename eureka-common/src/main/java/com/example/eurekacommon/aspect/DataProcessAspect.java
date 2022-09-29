@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer.aspect;
+package com.example.eurekacommon.aspect;
 
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
@@ -50,7 +50,7 @@ public class DataProcessAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         //获取方法注解DateProcess中参数
         DataProcess dateProcess = signature.getMethod().getAnnotation(DataProcess.class);
-        log.info("操作类型为:{}",dateProcess.sign());
+        log.info("操作类型为:{}", dateProcess.sign());
         if (dateProcess.sign() == DataHandle.ENCRYPT) {
             //加密方法参数
             encrypt(joinPoint);
@@ -118,15 +118,15 @@ public class DataProcessAspect {
                 if (encryptField.enumType() == EncryptWayEnum.SM4) {
                     SM4 sm4 = new SM4(Mode.ECB, Padding.PKCS5Padding, key.getBytes(StandardCharsets.UTF_8));
                     // SM4加密
-                    encryptCode = sm4.encryptHex(String.valueOf(field.get(obj)));
+                    encryptCode = sm4.encryptHex(encryptCode);
                 } else if (encryptField.enumType() == EncryptWayEnum.AES) {
                     AES aes = SecureUtil.aes(key.getBytes(StandardCharsets.UTF_8));
                     // AES加密
-                    encryptCode = aes.encryptHex(String.valueOf(field.get(obj)));
+                    encryptCode = aes.encryptHex(encryptCode);
                 } else if (encryptField.enumType() == EncryptWayEnum.DES) {
                     DES des = SecureUtil.des(key.getBytes(StandardCharsets.UTF_8));
                     // DES加密
-                    encryptCode = des.encryptHex(String.valueOf(field.get(obj)));
+                    encryptCode = des.encryptHex(encryptCode);
                 } else if (encryptField.enumType() == EncryptWayEnum.SHA1) {
                     // TODO SHA1 加密
                 }
@@ -184,18 +184,18 @@ public class DataProcessAspect {
                 //加密秘钥
                 String key = encryptField.key();
                 if (encryptField.enumType() == EncryptWayEnum.SM4) {
-                    SM4 sm4 = new SM4(Mode.ECB, Padding.NoPadding, key.getBytes(StandardCharsets.UTF_8));
+                    SM4 sm4 = new SM4(Mode.ECB, Padding.PKCS5Padding, key.getBytes(StandardCharsets.UTF_8));
                     // SM4解密
-                    decryptCode = sm4.decryptStr(String.valueOf(field.get(obj)));
+                    decryptCode = sm4.decryptStr(decryptCode);
                 } else if (encryptField.enumType() == EncryptWayEnum.AES) {
                     // 构建
                     AES aes = SecureUtil.aes(key.getBytes(StandardCharsets.UTF_8));
                     // AES解密
-                    decryptCode = aes.decryptStr(String.valueOf(field.get(obj)));
+                    decryptCode = aes.decryptStr(decryptCode);
                 } else if (encryptField.enumType() == EncryptWayEnum.DES) {
                     DES des = SecureUtil.des(key.getBytes(StandardCharsets.UTF_8));
                     // DES解密
-                    decryptCode = des.decryptStr(String.valueOf(field.get(obj)));
+                    decryptCode = des.decryptStr(decryptCode);
                 } else if (encryptField.enumType() == EncryptWayEnum.SHA1) {
                     // TODO SHA1 解密
                 }
