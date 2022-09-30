@@ -34,7 +34,7 @@
         <logger name="org.springframework" level="INFO"></logger>
         <logger name="org.mybatis" level="INFO"></logger>
         <!-- 建立一个默认的root的logger -->
-        <root level="trace">
+        <root level="info">
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="Console"/>
             <appender-ref ref="ERROR"/>
