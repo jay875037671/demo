@@ -13,6 +13,7 @@ import com.example.eurekacommon.enums.EncryptWayEnum;
 import com.example.eurekacommon.enums.PrivacyTypeEnum;
 import com.example.eurekacommon.util.PrivacyUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -113,6 +114,9 @@ public class DataProcessAspect {
                 //获取访问权
                 field.setAccessible(true);
                 String encryptCode = String.valueOf(field.get(obj));
+                if("null".equals(encryptCode) || StringUtils.isBlank(encryptCode)){
+                    return;
+                }
                 //加密秘钥
                 String key = encryptField.key();
                 if (encryptField.enumType() == EncryptWayEnum.SM4) {
