@@ -40,9 +40,8 @@ import java.util.List;
 public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgumentResolver, ApplicationContextAware, SmartInitializingSingleton {
     private ApplicationContext applicationContext;
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
-    private RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor;
+//    private RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor;
     private ServletModelAttributeMethodProcessor servletModelAttributeMethodProcessor;
-
     private JsonResolverProcessor jsonResolverProcessor;
 
     private static final String CONTENT_TYPE_JSON = "application/json";
@@ -80,9 +79,9 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
     private void init(){
         List<HandlerMethodArgumentResolver> argumentResolvers = requestMappingHandlerAdapter.getArgumentResolvers();
         assert argumentResolvers != null;
-        argumentResolvers.stream()
-                .filter(argumentResolver -> argumentResolver instanceof RequestResponseBodyMethodProcessor)
-                .forEach(argumentResolver -> requestResponseBodyMethodProcessor = (RequestResponseBodyMethodProcessor) argumentResolver);
+//        argumentResolvers.stream()
+//                .filter(argumentResolver -> argumentResolver instanceof RequestResponseBodyMethodProcessor)
+//                .forEach(argumentResolver -> requestResponseBodyMethodProcessor = (RequestResponseBodyMethodProcessor) argumentResolver);
         argumentResolvers.stream()
                 .filter(argumentResolver -> argumentResolver instanceof ServletModelAttributeMethodProcessor)
                 .forEach(argumentResolver -> servletModelAttributeMethodProcessor = (ServletModelAttributeMethodProcessor) argumentResolver);
