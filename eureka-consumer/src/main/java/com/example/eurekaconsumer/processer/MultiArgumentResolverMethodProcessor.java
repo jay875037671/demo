@@ -18,7 +18,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 import org.springframework.web.servlet.mvc.method.annotation.ServletModelAttributeMethodProcessor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +39,7 @@ import java.util.List;
 public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgumentResolver, ApplicationContextAware, SmartInitializingSingleton {
     private ApplicationContext applicationContext;
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
-//    private RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor;
+    //    private RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor;
     private ServletModelAttributeMethodProcessor servletModelAttributeMethodProcessor;
     private JsonResolverProcessor jsonResolverProcessor;
 
@@ -60,8 +59,8 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         String contentType = httpServletRequest.getContentType();
         if (null == contentType) {
             try {
-                return HttpGetUrlParamsResolver.resolveUrlParam(httpServletRequest,methodParameter.getParameter().getType());
-            }catch (Exception e){
+                return HttpGetUrlParamsResolver.resolveUrlParam(httpServletRequest, methodParameter.getParameter().getType());
+            } catch (Exception e) {
                 throw new IllegalArgumentException("不支持contentType");
             }
         }
@@ -76,12 +75,13 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         throw new IllegalArgumentException("不支持contentType");
     }
 
-    private void init(){
+    private void init() {
         List<HandlerMethodArgumentResolver> argumentResolvers = requestMappingHandlerAdapter.getArgumentResolvers();
         assert argumentResolvers != null;
 //        argumentResolvers.stream()
 //                .filter(argumentResolver -> argumentResolver instanceof RequestResponseBodyMethodProcessor)
 //                .forEach(argumentResolver -> requestResponseBodyMethodProcessor = (RequestResponseBodyMethodProcessor) argumentResolver);
+        // TODO form表单处理待重写 基本字段放入demoDto，其他字段放到extendMap
         argumentResolvers.stream()
                 .filter(argumentResolver -> argumentResolver instanceof ServletModelAttributeMethodProcessor)
                 .forEach(argumentResolver -> servletModelAttributeMethodProcessor = (ServletModelAttributeMethodProcessor) argumentResolver);
