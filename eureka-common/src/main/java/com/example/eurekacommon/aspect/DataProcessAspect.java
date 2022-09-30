@@ -182,7 +182,11 @@ public class DataProcessAspect {
             if (Objects.nonNull(encryptField)) {
                 //获取访问权
                 field.setAccessible(true);
-                String decryptCode = String.valueOf(field.get(obj)).split("-")[2];
+                String decryptCode = null == field.get(obj) ? null : String.valueOf(field.get(obj));
+                if (StringUtils.isBlank(decryptCode)) {
+                    return;
+                }
+                decryptCode = decryptCode.split("-")[2];
                 //加密秘钥
                 String key = encryptField.key();
                 if (encryptField.enumType() == EncryptWayEnum.SM4) {
