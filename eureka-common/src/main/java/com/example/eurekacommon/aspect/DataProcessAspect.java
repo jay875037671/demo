@@ -113,8 +113,8 @@ public class DataProcessAspect {
             if (Objects.nonNull(encryptField)) {
                 //获取访问权
                 field.setAccessible(true);
-                String encryptCode = String.valueOf(field.get(obj));
-                if("null".equals(encryptCode) || StringUtils.isBlank(encryptCode)){
+                String encryptCode = null == field.get(obj) ? null : String.valueOf(field.get(obj));
+                if (StringUtils.isBlank(encryptCode)) {
                     return;
                 }
                 //加密秘钥
