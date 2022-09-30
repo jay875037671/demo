@@ -1,6 +1,7 @@
 package com.example.eurekaconsumer.processer;
 
 import com.example.eurekacommon.annotation.MultiArgumentResolver;
+import com.example.eurekaconsumer.Resolver.DemoDtoMessageConverter;
 import com.example.eurekaconsumer.Resolver.HttpGetUrlParamsResolver;
 import com.example.eurekaconsumer.Resolver.JsonResolverProcessor;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ServletModelAttribu
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -84,7 +86,9 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         argumentResolvers.stream()
                 .filter(argumentResolver -> argumentResolver instanceof ServletModelAttributeMethodProcessor)
                 .forEach(argumentResolver -> servletModelAttributeMethodProcessor = (ServletModelAttributeMethodProcessor) argumentResolver);
-        jsonResolverProcessor = new JsonResolverProcessor(requestMappingHandlerAdapter.getMessageConverters(),new ContentNegotiationManager(),new ArrayList());
+        jsonResolverProcessor = new JsonResolverProcessor(Collections.singletonList(new DemoDtoMessageConverter()),
+                new ContentNegotiationManager(),
+                new ArrayList());
     }
 
     @Override

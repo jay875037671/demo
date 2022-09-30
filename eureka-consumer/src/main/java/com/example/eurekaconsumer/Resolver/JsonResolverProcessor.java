@@ -58,5 +58,4 @@ public class JsonResolverProcessor extends RequestResponseBodyMethodProcessor {
         }
         return this.adaptArgumentIfNecessary(arg, parameter);
     }
-
 }
