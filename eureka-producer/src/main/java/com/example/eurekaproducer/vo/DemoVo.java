@@ -3,12 +3,17 @@ package com.example.eurekaproducer.vo;
 import com.example.eurekacommon.annotation.SensitiveField;
 import com.example.eurekacommon.enums.EncryptWayEnum;
 import com.example.eurekacommon.enums.PrivacyTypeEnum;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Map;
 
 @Data
-public class DemoVo {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class DemoVo implements Serializable {
+    private static final long serialVersionUID = -8762524609645000937L;
+
     @SensitiveField(hasSensitive = true,privacyEnum = PrivacyTypeEnum.NAME,enumType = EncryptWayEnum.SM4,key = "1234567891234567")
     private String name;
 
