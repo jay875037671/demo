@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="debug" monitorInterval="30">
+<configuration status="info" monitorInterval="30">
     <properties>
         <property name="LOG_HOME">/logs/consumer</property>
     </properties>
