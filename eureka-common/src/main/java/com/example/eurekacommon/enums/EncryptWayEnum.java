@@ -22,9 +22,4 @@ public enum EncryptWayEnum {
      * DES加密
      */
     DES,
-
-    /**
-     * SHA1加密
-     */
-    SHA1,
 }

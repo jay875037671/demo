@@ -1,6 +1,8 @@
 package com.example.eurekaconsumer.processer;
 
 import com.example.eurekacommon.annotation.MultiArgumentResolver;
+import com.example.eurekaconsumer.Resolver.HttpGetUrlParamsResolver;
+import com.example.eurekaconsumer.Resolver.JsonResolverProcessor;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.MethodParameter;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -18,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
 import org.springframework.web.servlet.mvc.method.annotation.ServletModelAttributeMethodProcessor;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +41,8 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
     private RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor;
     private ServletModelAttributeMethodProcessor servletModelAttributeMethodProcessor;
 
+    private JsonResolverProcessor jsonResolverProcessor;
+
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
     private static final String CONTENT_TYPE_FORM_DATA = "multipart/form-data";
@@ -52,11 +58,15 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         assert httpServletRequest != null;
         String contentType = httpServletRequest.getContentType();
         if (null == contentType) {
-            throw new IllegalArgumentException("不支持contentType");
+            try {
+                return HttpGetUrlParamsResolver.resolveUrlParam(httpServletRequest,methodParameter.getParameter().getType());
+            }catch (Exception e){
+                throw new IllegalArgumentException("不支持contentType");
+            }
         }
         init();
         if (contentType.contains(CONTENT_TYPE_JSON)) {
-            return requestResponseBodyMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
+            return jsonResolverProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
         } else if (contentType.contains(CONTENT_TYPE_FORM_URLENCODED)) {
             return servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
         } else if (contentType.contains(CONTENT_TYPE_FORM_DATA)) {
@@ -74,6 +84,7 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         argumentResolvers.stream()
                 .filter(argumentResolver -> argumentResolver instanceof ServletModelAttributeMethodProcessor)
                 .forEach(argumentResolver -> servletModelAttributeMethodProcessor = (ServletModelAttributeMethodProcessor) argumentResolver);
+        jsonResolverProcessor = new JsonResolverProcessor(requestMappingHandlerAdapter.getMessageConverters(),new ContentNegotiationManager(),new ArrayList());
     }
 
     @Override

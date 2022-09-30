@@ -127,8 +127,6 @@ public class DataProcessAspect {
                     DES des = SecureUtil.des(key.getBytes(StandardCharsets.UTF_8));
                     // DES加密
                     encryptCode = des.encryptHex(encryptCode);
-                } else if (encryptField.enumType() == EncryptWayEnum.SHA1) {
-                    // TODO SHA1 加密
                 }
                 field.set(obj, String.format("ENCRYPT-%s-%s", encryptField.enumType(), encryptCode));
             }
@@ -196,8 +194,6 @@ public class DataProcessAspect {
                     DES des = SecureUtil.des(key.getBytes(StandardCharsets.UTF_8));
                     // DES解密
                     decryptCode = des.decryptStr(decryptCode);
-                } else if (encryptField.enumType() == EncryptWayEnum.SHA1) {
-                    // TODO SHA1 解密
                 }
                 //判断解密是否需要脱敏处理
                 if (encryptField.hasSensitive()) {

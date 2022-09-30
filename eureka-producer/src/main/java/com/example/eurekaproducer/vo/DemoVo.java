@@ -5,6 +5,8 @@ import com.example.eurekacommon.enums.EncryptWayEnum;
 import com.example.eurekacommon.enums.PrivacyTypeEnum;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 public class DemoVo {
     @SensitiveField(hasSensitive = true,privacyEnum = PrivacyTypeEnum.NAME,enumType = EncryptWayEnum.SM4,key = "1234567891234567")
@@ -23,4 +25,6 @@ public class DemoVo {
 
     @SensitiveField(hasSensitive = false,privacyEnum = PrivacyTypeEnum.NAME)
     private String abc;
+
+    private Map<String,Object> extendMap;
 }

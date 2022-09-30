@@ -3,13 +3,6 @@
     <properties>
         <property name="LOG_HOME">/logs/common</property>
     </properties>
-    <Filters>
-        <BurstFilter level="warn" rate="20" maxBurst="200"/>
-        <StringMatchFilter text="name" onMatc="DENY" onMistmatch="ACCEPT"/>
-        <StringMatchFilter text="id" onMatc="DENY" onMistmatch="ACCEPT"/>
-        <StringMatchFilter text="cardNo" onMatc="DENY" onMistmatch="ACCEPT"/>
-        <StringMatchFilter text="phone" onMatc="DENY" onMistmatch="ACCEPT"/>
-    </Filters>
 
     <!-- 先定义所有的appender(附加器)-->
     <appenders>

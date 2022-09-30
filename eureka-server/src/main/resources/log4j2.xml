@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration status="debug" monitorInterval="30">
     <properties>
-        <property name="LOG_HOME">/logs/producer</property>
+        <property name="LOG_HOME">/logs/eureka</property>
     </properties>
 
     <!-- 先定义所有的appender(附加器)-->
