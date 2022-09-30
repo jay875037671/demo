@@ -29,7 +29,7 @@ public class ProducerController {
         return param;
     }
 
-    @RequestMapping("")
+    @RequestMapping("/deal")
     public String doTest(String param) {
         return param;
     }
