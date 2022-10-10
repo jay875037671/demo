@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer.Resolver;
+package com.example.eurekaconsumer.resolver;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;

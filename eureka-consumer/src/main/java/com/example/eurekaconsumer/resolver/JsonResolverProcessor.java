@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer.Resolver;
+package com.example.eurekaconsumer.resolver;
 
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.accept.ContentNegotiationManager;

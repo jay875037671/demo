@@ -1,9 +1,9 @@
 package com.example.eurekaconsumer.processer;
 
 import com.example.eurekacommon.annotation.MultiArgumentResolver;
-import com.example.eurekaconsumer.Resolver.DemoDtoMessageConverter;
-import com.example.eurekaconsumer.Resolver.HttpGetUrlParamsResolver;
-import com.example.eurekaconsumer.Resolver.JsonResolverProcessor;
+import com.example.eurekaconsumer.resolver.DemoDtoMessageConverter;
+import com.example.eurekaconsumer.resolver.HttpGetUrlParamsResolver;
+import com.example.eurekaconsumer.resolver.JsonResolverProcessor;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.example.eurekaconsumer.Resolver;
+package com.example.eurekaconsumer.resolver;
 
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.core.JsonProcessingException;
