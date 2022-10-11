@@ -22,7 +22,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
@@ -73,24 +72,19 @@ public class DemoDtoMessageConverter extends MappingJackson2HttpMessageConverter
                 Object o = clazz.newInstance();
                 Field[] fields = clazz.getDeclaredFields();
                 map.keySet().forEach(key -> {
-                    // 如果请求的字段在demoDto中
-                    if (Arrays.stream(fields).anyMatch(field -> field.getName().equals(key))) {
-                        try {
+                    try {
+                        if (Arrays.stream(fields).anyMatch(field -> field.getName().equals(key))) {
+                            // 如果请求的字段在demoDto中
                             Field field = clazz.getDeclaredField(key);
                             Method setter = clazz.getMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1),
                                     field.getType());
                             setter.invoke(o, map.get(key));
-                        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException |
-                                 IllegalAccessException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-                        //其他字段放到extendMap中
-                        try {
+                        } else {
+                            //其他字段放到extendMap中
                             HttpGetUrlParamsResolver.makeExtendMap(clazz, o, key, map);
-                        } catch (ReflectiveOperationException e) {
-                            throw new RuntimeException(e);
                         }
+                    } catch (ReflectiveOperationException e) {
+                        throw new RuntimeException(e);
                     }
                 });
                 return o;
