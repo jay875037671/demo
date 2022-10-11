@@ -2,6 +2,7 @@ package com.example.eurekaconsumer.processer;
 
 import com.example.eurekacommon.annotation.MultiArgumentResolver;
 import com.example.eurekaconsumer.resolver.DemoDtoMessageConverter;
+import com.example.eurekaconsumer.resolver.FormResolverProcessor;
 import com.example.eurekaconsumer.resolver.HttpGetUrlParamsResolver;
 import com.example.eurekaconsumer.resolver.JsonResolverProcessor;
 import lombok.AllArgsConstructor;
@@ -40,8 +41,9 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
     private ApplicationContext applicationContext;
     private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
     //    private RequestResponseBodyMethodProcessor requestResponseBodyMethodProcessor;
-    private ServletModelAttributeMethodProcessor servletModelAttributeMethodProcessor;
+//    private ServletModelAttributeMethodProcessor servletModelAttributeMethodProcessor;
     private JsonResolverProcessor jsonResolverProcessor;
+    private FormResolverProcessor formResolverProcessor;
 
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
@@ -68,9 +70,9 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
         if (contentType.contains(CONTENT_TYPE_JSON)) {
             return jsonResolverProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
         } else if (contentType.contains(CONTENT_TYPE_FORM_URLENCODED)) {
-            return servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
+            return formResolverProcessor.resolveDtoArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
         } else if (contentType.contains(CONTENT_TYPE_FORM_DATA)) {
-            return servletModelAttributeMethodProcessor.resolveArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
+            return formResolverProcessor.resolveDtoArgument(methodParameter, modelAndViewContainer, nativeWebRequest, webDataBinderFactory);
         }
         throw new IllegalArgumentException("不支持contentType");
     }
@@ -81,13 +83,17 @@ public class MultiArgumentResolverMethodProcessor implements HandlerMethodArgume
 //        argumentResolvers.stream()
 //                .filter(argumentResolver -> argumentResolver instanceof RequestResponseBodyMethodProcessor)
 //                .forEach(argumentResolver -> requestResponseBodyMethodProcessor = (RequestResponseBodyMethodProcessor) argumentResolver);
-        // TODO form表单处理待重写 基本字段放入demoDto，其他字段放到extendMap
-        argumentResolvers.stream()
-                .filter(argumentResolver -> argumentResolver instanceof ServletModelAttributeMethodProcessor)
-                .forEach(argumentResolver -> servletModelAttributeMethodProcessor = (ServletModelAttributeMethodProcessor) argumentResolver);
+
+//        argumentResolvers.stream()
+//                .filter(argumentResolver -> argumentResolver instanceof ServletModelAttributeMethodProcessor)
+//                .forEach(argumentResolver -> servletModelAttributeMethodProcessor = (ServletModelAttributeMethodProcessor) argumentResolver);
+        /**
+         *  基本字段放入demoDto，其他字段放到extendMap
+         */
         jsonResolverProcessor = new JsonResolverProcessor(Collections.singletonList(new DemoDtoMessageConverter()),
                 new ContentNegotiationManager(),
                 new ArrayList());
+        formResolverProcessor = new FormResolverProcessor(true);
     }
 
     @Override

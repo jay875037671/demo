@@ -66,18 +66,17 @@ public class DemoDtoMessageConverter extends MappingJackson2HttpMessageConverter
             if (isUnicode) {
                 // 转换请求中的基本字段到demoDto
                 Map<String, Object> map = objectMapper.readValue(inputStream, Map.class);
-                Class clazz = javaType.getRawClass();
+                Class<?> clazz = javaType.getRawClass();
                 Object o = clazz.newInstance();
                 Field[] fields = clazz.getDeclaredFields();
                 map.keySet().stream()
                         .forEach(key -> {
                             // 如果请求的字段在demoDto中
-                            if (Arrays.asList(fields).stream().anyMatch(field -> field.getName().equals(key))) {
+                            if (Arrays.stream(fields).anyMatch(field -> field.getName().equals(key))) {
                                 try {
                                     Field field = clazz.getDeclaredField(key);
-                                    StringBuffer sb = new StringBuffer();
-                                    sb.append("set").append(key.substring(0, 1).toUpperCase()).append(key.substring(1));
-                                    Method setter = clazz.getMethod(sb.toString(), field.getType());
+                                    Method setter = clazz.getMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1),
+                                            field.getType());
                                     setter.invoke(o, map.get(key));
                                 } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException |
                                          IllegalAccessException e) {
@@ -108,9 +107,7 @@ public class DemoDtoMessageConverter extends MappingJackson2HttpMessageConverter
             throw new HttpMessageConversionException("Type definition error: " + var11.getType(), var11);
         } catch (JsonProcessingException var12) {
             throw new HttpMessageNotReadableException("JSON parse error: " + var12.getOriginalMessage(), var12, inputMessage);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
