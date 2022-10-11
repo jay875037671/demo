@@ -10,6 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpGetUrlParamsResolver {
+
+    /**
+     * 读取url上的参数
+     * @param httpServletRequest
+     * @param clazz
+     * @return
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public static Object resolveUrlParam(HttpServletRequest httpServletRequest, Class<?> clazz) throws InstantiationException, IllegalAccessException {
         Map<String, Object> params = new HashMap<>();
         for (String param : httpServletRequest.getQueryString().split("&")) {
