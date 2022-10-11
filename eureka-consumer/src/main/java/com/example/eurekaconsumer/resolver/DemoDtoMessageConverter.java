@@ -72,28 +72,27 @@ public class DemoDtoMessageConverter extends MappingJackson2HttpMessageConverter
                 Class<?> clazz = javaType.getRawClass();
                 Object o = clazz.newInstance();
                 Field[] fields = clazz.getDeclaredFields();
-                map.keySet().stream()
-                        .forEach(key -> {
-                            // 如果请求的字段在demoDto中
-                            if (Arrays.stream(fields).anyMatch(field -> field.getName().equals(key))) {
-                                try {
-                                    Field field = clazz.getDeclaredField(key);
-                                    Method setter = clazz.getMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1),
-                                            field.getType());
-                                    setter.invoke(o, map.get(key));
-                                } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException |
-                                         IllegalAccessException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            } else {
-                                //其他字段放到extendMap中
-                                try {
-                                    HttpGetUrlParamsResolver.makeExtendMap(clazz, o, key, map);
-                                } catch (ReflectiveOperationException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        });
+                map.keySet().forEach(key -> {
+                    // 如果请求的字段在demoDto中
+                    if (Arrays.stream(fields).anyMatch(field -> field.getName().equals(key))) {
+                        try {
+                            Field field = clazz.getDeclaredField(key);
+                            Method setter = clazz.getMethod("set" + key.substring(0, 1).toUpperCase() + key.substring(1),
+                                    field.getType());
+                            setter.invoke(o, map.get(key));
+                        } catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException |
+                                 IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        //其他字段放到extendMap中
+                        try {
+                            HttpGetUrlParamsResolver.makeExtendMap(clazz, o, key, map);
+                        } catch (ReflectiveOperationException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
                 return o;
             } else {
                 Reader reader = new InputStreamReader(inputStream, charset);
