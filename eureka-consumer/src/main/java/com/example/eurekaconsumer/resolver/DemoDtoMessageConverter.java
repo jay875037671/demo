@@ -26,7 +26,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
 
 public class DemoDtoMessageConverter extends MappingJackson2HttpMessageConverter {
     private static final Map<String, JsonEncoding> ENCODINGS = CollectionUtils.newHashMap(JsonEncoding.values().length);
@@ -85,15 +88,8 @@ public class DemoDtoMessageConverter extends MappingJackson2HttpMessageConverter
                             } else {
                                 //其他字段放到extendMap中
                                 try {
-                                    Method mapGetter = clazz.getMethod("getExtendMap");
-                                    Method mapSetter = clazz.getMethod("setExtendMap", Map.class);
-                                    Map<String, Object> to = (Map<String, Object>) mapGetter.invoke(o);
-                                    if(null == to){
-                                        to = new HashMap<>();
-                                    }
-                                    to.put(key, map.get(key));
-                                    mapSetter.invoke(o, to);
-                                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                                    HttpGetUrlParamsResolver.makeExtendMap(clazz, o, key, map);
+                                } catch (ReflectiveOperationException e) {
                                     throw new RuntimeException(e);
                                 }
                             }

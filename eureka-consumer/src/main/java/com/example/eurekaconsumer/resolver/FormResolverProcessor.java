@@ -81,19 +81,18 @@ public class FormResolverProcessor extends ServletModelAttributeMethodProcessor 
              * 基本字段放入demoDto，其他字段放到extendMap
              */
             log.info("转换form请求基本字段开始!");
-            Map parameterMap = webRequest.getParameterMap();
             Class<?> clazz = parameter.getParameterType();
-            Arrays.stream(clazz.getDeclaredFields()).forEach(field -> parameterMap.remove(field.getName()));
             Method mapGetter = clazz.getMethod("getExtendMap");
             Method mapSetter = clazz.getMethod("setExtendMap", Map.class);
 
-            Map to = (Map) mapGetter.invoke(attribute);
+            Map<String, Object> from = new HashMap<>(webRequest.getParameterMap());
+            Arrays.stream(clazz.getDeclaredFields()).forEach(field -> from.remove(field.getName()));
+            Map<String, Object> to = (Map<String, Object>) mapGetter.invoke(attribute);
             if (null == to) {
                 to = new HashMap<>();
             }
-            for (Object o : parameterMap.keySet()) {
-                String key = (String) o;
-                to.put(key, parameterMap.get(key));
+            for (String key : from.keySet()) {
+                to.put(key, from.get(key));
             }
             mapSetter.invoke(attribute, to);
             log.info("转换form请求基本字段完成!");
